@@ -1,5 +1,7 @@
 # Stealthwatch: Office 365 Importer
 
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/CiscoSE/Office365Importer)
+
 ## Summary
 
 This is a script to import Microsoft Office 365 address space into Tags (Host Groups) within Stealthwatch.
