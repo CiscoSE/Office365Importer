@@ -120,6 +120,43 @@ class StealthwatchClient:
             print("Unable to post to the SMC - Error: {}".format(err))
             exit()
 
+    def get_tags(self):
+        """Get all Tags (Host Groups) from Stealthwatch."""
+
+        # Build the URL to create a Tag
+        url = "https://{}/smc-configuration/rest/v1/tenants/{}/tags".format(self.__smc_address, self.__tenant_id)
+
+        # Build the data to submit
+        data = {
+            "domainId": self.__tenant_id,
+        }
+
+        try:
+            if self.__debug:
+                print("Getting Stealthwatch Tags...")
+
+            # Send the create request
+            response = self.__session.get(url, json=data, verify=False)
+
+            # If the request was successful, then proceed, otherwise terminate.
+            if response.status_code == 200:
+                if self.__debug:
+                    print("Tag Request Successful.")
+
+                # Parse the response as JSON
+                tag_data = response.json()
+
+                # Return the Tag ID
+                return tag_data
+
+            else:
+                print("SMC Connection Failure - HTTP Return Code: {}\nResponse: {}".format(response.status_code, response.text))
+                exit()
+
+        except Exception as err:
+            print("Unable to get from the SMC - Error: {}".format(err))
+            exit()
+
     def create_tag(self, parent_tag_id, tag_name, ip_list=[], host_baselines=False,
                    suppress_excluded_services=True, inverse_suppression=False, host_trap=False, send_to_cta=False):
         """Create a new Tag (Host Group) in Stealthwatch."""
