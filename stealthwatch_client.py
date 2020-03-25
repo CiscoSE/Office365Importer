@@ -20,6 +20,7 @@ import requests
 
 from requests.packages import urllib3
 
+
 class StealthwatchClient:
     """A class to allow easy interaction with Stealthwatch."""
 
@@ -296,13 +297,13 @@ class StealthwatchClient:
 
             # Parse the version number out of the response
             version_str = str(response.text.split('<div id="loginMessage">')[1]
-                            .replace('<br />', '<br/>')
-                            .replace('<br>', '<br/>')
-                            .split('<br/>')[1]
-                            .split('</div>')[0]
-                            .replace("\n", "")
-                            .replace("\r", "")
-                            .strip()).split('.')
+                              .replace('<br />', '<br/>')
+                              .replace('<br>', '<br/>')
+                              .split('<br/>')[1]
+                              .split('</div>')[0]
+                              .replace("\n", "")
+                              .replace("\r", "")
+                              .strip()).split('.')
 
             # Append all version numbers to the version list as integers
             for i in version_str:
