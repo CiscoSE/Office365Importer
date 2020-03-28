@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 #  -*- coding: utf-8 -*-
+"""
+This is a script to import Microsoft Office 365 address space into Tags (Host Groups)
+within Stealthwatch Enterprise.
 
-#####################
-# ABOUT THIS SCRIPT #
-#####################
-#
-# office_365_importer.py
-# ----------------
-# Author: Alan Nix
-# Property of: Cisco Systems
-# Version: 1.0
-# Release Date: 10/20/2019
-#
-############################################################
+office_365_importer.py
+----------------
+Author: Alan Nix
+Property of: Cisco Systems
+"""
 
 import argparse
 import getpass
