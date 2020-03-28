@@ -25,11 +25,6 @@ import uuid
 import requests
 
 from stealthwatch_client import StealthwatchClient
-from requests.packages import urllib3
-from requests.auth import HTTPBasicAuth
-
-# If receiving SSL Certificate Errors, un-comment the line below
-urllib3.disable_warnings()
 
 # Config Paramters
 CONFIG_FILE = "config.json"
@@ -162,7 +157,7 @@ def main():
         ip_dict = get_new_addresses()
 
         # Instantiate a new StealthwatchClient
-        stealthwatch = StealthwatchClient()
+        stealthwatch = StealthwatchClient(validate_certs=False)
 
         # Login to Stealtwatch
         stealthwatch.login(CONFIG_DATA["SW_ADDRESS"], CONFIG_DATA["SW_USERNAME"], CONFIG_DATA["SW_PASSWORD"])
@@ -170,10 +165,8 @@ def main():
         # If a Domain ID wasn't specified, then get one
         if not CONFIG_DATA["SW_TENANT_ID"]:
 
-            # Get Tenants from REST API
+            # Get Tenants from REST API, and save it
             CONFIG_DATA["SW_TENANT_ID"] = stealthwatch.get_tenants()
-
-            # Save the Tenant/Domain ID
             save_config()
 
         else:
@@ -185,9 +178,10 @@ def main():
         if not CONFIG_DATA["SW_PARENT_TAG"]:
 
             # Create the Tag
-            CONFIG_DATA["SW_PARENT_TAG"] = stealthwatch.create_tag(0, "Microsoft Office 365")
+            response = stealthwatch.create_tag(0, "Microsoft Office 365")
 
             # Save the parent Tag/Host Group ID
+            CONFIG_DATA["SW_PARENT_TAG"] = response["data"][0]["id"]
             save_config()
 
         print("Uploading data to Stealthwatch...")
@@ -202,9 +196,10 @@ def main():
                 stealthwatch.update_tag(CONFIG_DATA["SW_PARENT_TAG"], CONFIG_DATA[service_name], service_name, ip_list)
             else:
                 # Create a new Tag (Host Group) for the Office 365 service
-                CONFIG_DATA[service_name] = stealthwatch.create_tag(CONFIG_DATA["SW_PARENT_TAG"], service_name, ip_list)
+                response = stealthwatch.create_tag(CONFIG_DATA["SW_PARENT_TAG"], service_name, ip_list)
 
                 # Save the new Tag/Host Group ID
+                CONFIG_DATA[service_name] = response["data"][0]["id"]
                 save_config()
 
         # Update the latest imported version

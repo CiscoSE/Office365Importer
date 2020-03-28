@@ -4,7 +4,7 @@
 
 ## Summary
 
-This is a script to import Microsoft Office 365 address space into Tags (Host Groups) within Stealthwatch.
+This is a script to import Microsoft Office 365 address space into Tags (Host Groups) within Stealthwatch Enterprise.
 
 This allows for more granular tuning and identification of network flows within Stealthwatch Enterprise.
 
