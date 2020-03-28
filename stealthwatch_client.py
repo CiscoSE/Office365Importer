@@ -125,6 +125,20 @@ class StealthwatchClient:
         response = self._get_request(url, json=data)
 
         return response.json()
+    
+    def get_tag(self, tag_id):
+        """Get a Tag (Host Group) from Stealthwatch"""
+
+        if self.__debug:
+            print("Getting Stealthwatch Tag...")
+
+        # Build the URL to create a Tag
+        url = "https://{}/smc-configuration/rest/v1/tenants/{}/tags/{}".format(self.__smc_address, self.__tenant_id, tag_id)
+
+        # Post Tag data to Stealthwatch
+        response = self._get_request(url)
+
+        return response.json()
 
     def create_tag(self, parent_tag_id, tag_name, ip_list=[], host_baselines=False,
                    suppress_excluded_services=True, inverse_suppression=False, host_trap=False, send_to_cta=False):
