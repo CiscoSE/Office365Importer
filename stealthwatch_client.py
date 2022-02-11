@@ -7,6 +7,8 @@ stealthwatch_client.py
 ----------------
 Author: Alan Nix
 Property of: Cisco Systems
+
+Revisions: AdmiralMaggie, added XSRF tokens
 """
 
 import json
@@ -125,7 +127,7 @@ class StealthwatchClient:
         response = self._get_request(url, json=data)
 
         return response.json()
-    
+
     def get_tag(self, tag_id):
         """Get a Tag (Host Group) from Stealthwatch"""
 
@@ -133,7 +135,8 @@ class StealthwatchClient:
             print("Getting Stealthwatch Tag...")
 
         # Build the URL to create a Tag
-        url = "https://{}/smc-configuration/rest/v1/tenants/{}/tags/{}".format(self.__smc_address, self.__tenant_id, tag_id)
+        url = "https://{}/smc-configuration/rest/v1/tenants/{}/tags/{}".format(self.__smc_address, self.__tenant_id,
+                                                                               tag_id)
 
         # Post Tag data to Stealthwatch
         response = self._get_request(url)
@@ -253,7 +256,9 @@ class StealthwatchClient:
                     return version
 
         except Exception as err:
-            print("Unable to get Appliance Status from the SMC, falling back to login page parsing...\nError: {}".format(err))
+            print(
+                "Unable to get Appliance Status from the SMC, falling back to login page parsing...\nError: {}".format(
+                    err))
 
         # The following block of code is just a fall-back for older versions of Stealthwatch
 
@@ -300,10 +305,17 @@ class StealthwatchClient:
                 if self.__debug:
                     print("Stealthwatch Returned Response: {}\n".format(response.text))
 
+                # set XSRF token
+                for cookie in response.cookies:
+                    if cookie.name == "XSRF-TOKEN":
+                        self.__session.headers.update({"X-XSRF-TOKEN": cookie.value})
+                        break
+
                 return response
 
             else:
-                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code, response.text))
+                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code,
+                                                                                           response.text))
                 exit()
 
         except Exception as err:
@@ -330,10 +342,17 @@ class StealthwatchClient:
                 if self.__debug:
                     print("Stealthwatch Returned Response: {}\n".format(response.text))
 
+                # set XSRF token
+                for cookie in response.cookies:
+                    if cookie.name == "XSRF-TOKEN":
+                        self.__session.headers.update({"X-XSRF-TOKEN": cookie.value})
+                        break
+
                 return response
 
             else:
-                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code, response.text))
+                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code,
+                                                                                           response.text))
                 exit()
 
         except Exception as err:
@@ -360,10 +379,17 @@ class StealthwatchClient:
                 if self.__debug:
                     print("Stealthwatch Returned Response: {}\n".format(response.text))
 
+                # set XSRF token
+                for cookie in response.cookies:
+                    if cookie.name == "XSRF-TOKEN":
+                        self.__session.headers.update({"X-XSRF-TOKEN": cookie.value})
+                        break
+
                 return response
 
             else:
-                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code, response.text))
+                print("SMC Connection Failure!\nHTTP Return Code: {}\nResponse: {}".format(response.status_code,
+                                                                                           response.text))
                 exit()
 
         except Exception as err:
